@@ -32,13 +32,13 @@ export const ScrollPhrase = () => {
             return (
               <motion.span
                 key={i}
-                style={{ opacity, y, filter: `blur(${blur}px)` }}
-                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight"
                 style={{ 
                   fontFamily: "'Playfair Display', serif",
-                  opacity: opacity,
-                  y: y,
+                  opacity, 
+                  y, 
+                  filter: `blur(${blur}px)` 
                 }}
+                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight"
               >
                 {word}
               </motion.span>
