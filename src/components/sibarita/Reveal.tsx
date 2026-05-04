@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
 
 interface RevealProps {
@@ -28,10 +29,10 @@ export const Reveal = ({ children, delay = 0, className = "", as: Tag = "div" }:
   }, []);
 
   const style: CSSProperties = { transitionDelay: `${delay}ms` };
-  const Component = Tag as any;
+  const Component = Tag as React.ElementType;
   return (
     <Component
-      ref={ref as any}
+      ref={ref as React.Ref<HTMLElement>}
       style={style}
       className={`reveal ${visible ? "is-visible" : ""} ${className}`}
     >

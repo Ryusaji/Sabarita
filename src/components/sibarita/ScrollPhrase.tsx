@@ -1,6 +1,36 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
+
+interface WordProps {
+  word: string;
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+}
+
+const Word = ({ word, index, total, progress }: WordProps) => {
+  const start = index / total;
+  const end = start + (1 / total) * 2;
+  
+  const opacity = useTransform(progress, [start, end], [0.1, 1]);
+  const y = useTransform(progress, [start, end], [20, 0]);
+  const blur = useTransform(progress, [start, end], [10, 0]);
+
+  return (
+    <motion.span
+      style={{ 
+        fontFamily: "'Playfair Display', serif",
+        opacity, 
+        y, 
+        filter: `blur(${blur}px)` 
+      }}
+      className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight inline-block"
+    >
+      {word}
+    </motion.span>
+  );
+};
 
 export const ScrollPhrase = () => {
   const { lang } = useLanguage();
@@ -21,29 +51,15 @@ export const ScrollPhrase = () => {
     <section ref={containerRef} className="py-32 bg-surface-dark text-surface-dark-foreground overflow-hidden">
       <div className="mx-auto max-w-5xl px-6 text-center">
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
-          {words.map((word, i) => {
-            const start = i / words.length;
-            const end = start + (1 / words.length) * 2;
-            
-            const opacity = useTransform(scrollYProgress, [start, end], [0.1, 1]);
-            const y = useTransform(scrollYProgress, [start, end], [20, 0]);
-            const blur = useTransform(scrollYProgress, [start, end], [10, 0]);
-
-            return (
-              <motion.span
-                key={i}
-                style={{ 
-                  fontFamily: "'Playfair Display', serif",
-                  opacity, 
-                  y, 
-                  filter: `blur(${blur}px)` 
-                }}
-                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight"
-              >
-                {word}
-              </motion.span>
-            );
-          })}
+          {words.map((word, i) => (
+            <Word 
+              key={i} 
+              word={word} 
+              index={i} 
+              total={words.length} 
+              progress={scrollYProgress} 
+            />
+          ))}
         </div>
       </div>
     </section>
